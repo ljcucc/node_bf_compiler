@@ -14,12 +14,25 @@ function Parser(){
       body:[]
     });
     
-    var index = 0;
+    var index = 0,lastIndex = 0;
+    var count = 0;
     while(index < sourceList.length){
       console.log(index);
       index += parenParse(index);
       index += parseCalc(index);
       index += parseElse(index);
+      index += parseLineEnd(index);
+      
+      if(index != lastIndex){
+        lastIndex = index;
+        count = 0;
+      }else{
+        count ++;
+      }
+      
+      if(count > 10){
+        throw new InternalError("The parse cannot be solved.");
+      }
     }
     
     if(parenStack.length != 1){
@@ -40,12 +53,12 @@ function Parser(){
     
     var item = sourceList[index];
     
-    console.log("parsing Parens")
+    console.log("parenParse is execute")
     console.log(item);
     
     if(item.type == "paren"){
       if(item.data == "("){
-        console.log("pushing new item")
+        console.log("( is execute")
         parenStack.push({
           type:"paren",
           body:[]
@@ -53,10 +66,10 @@ function Parser(){
       }else if(item.data == ")"){
         var popItem = parenStack.pop(); //move last node into upper node.
         if(isValue(popItem)){
-          console.log("is value");
+          // console.log("is value");
           var lastItem = parenStack.pop();
         }else{
-          console.log("not a value");
+          // console.log("not a value");
           console.log(popItem);
         }
         /*
@@ -92,21 +105,28 @@ function Parser(){
     if(item.type != "calc") return 0;
     
     if(item.data == "+" || item.data == "-"){
-      var body = parenStack[parenStack.length-1].body
-      parenStack[parenStack.length-1].body = [];
+      var body = parenStack[parenStack.length-1].body.pop();
       parenStack.push({
         type:"calc",
         data:item.data,
-        body
+        body:[body]
       });
-    }
+    }else if(item.data == "*" || item.data == "/"){
+      var body = parenStack[parenStack.length-1].body.pop();
+      console.log("*/ part of parseCalc is execute")
+      parenStack.push({
+        type:"calc",
+        data:item.data,
+        body:[body]
+      })
+    }else return 0;
     
     return 1;
   }
   
   function parseElse(index){
     if(nullPointBreaker(index)) return 0;
-    console.log("pushing...")
+    console.log("parseElse is execute")
     
     var item = sourceList[index];
     
@@ -115,18 +135,39 @@ function Parser(){
     switch(item.type){
       case "paren":
       case "calc":
+      case "lineEnd":
         return 0;
       case "number":
-        if(parenStack[parenStack.length - 1].type == "calc"){
-          pushLexerItem(item);
-          pushLexerItem(parenStack.pop());
-          return 1;
-        }
+        // if(parenStack[parenStack.length - 1].type == "calc"){
+        //   pushLexerItem(item);
+        //   pushLexerItem(parenStack.pop());
+        //   return 1;
+        // }
       default:
         pushLexerItem(item);
     }
     
     return 1;
+  }
+  
+  function parseLineEnd(index){
+    var item = sourceList[index];
+    try{
+      if(item.type != "lineEnd") return 0;
+    }catch(e){
+      throw new SyntaxError("exception with ';'.");
+    }
+    console.log("parseLineEnd is execute");
+    pushAllToStack();
+    return 1;
+  }
+  
+  function pushAllToStack(){
+    console.log("pushAllToStack is execute");
+    while(parenStack[parenStack.length -1].type != "root"
+    &&parenStack[parenStack.length -1].type != "areaParen"){
+      pushLexerItem(parenStack.pop());
+    }
   }
   
   function isValue(value){

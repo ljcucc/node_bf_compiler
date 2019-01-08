@@ -47,8 +47,8 @@ function Lexer(){
       
       index += analyzePart(analyzeChar(index,sourceCode,"+","calc"));
       index += analyzePart(analyzeChar(index,sourceCode,"-","calc"));
-      index += analyzePart(analyzeChar(index,sourceCode,"*","clac"));
       index += analyzePart(analyzeChar(index,sourceCode,"*","calc"));
+      index += analyzePart(analyzeChar(index,sourceCode,"/","calc"));
       
       index += analyzePart(analyzeNumber(index,sourceCode));
       index += analyzePart(analyzeWord(index,sourceCode));
