@@ -4,7 +4,13 @@
       var compiler = new Nodebf();
       console.log($("#sourceCode").val())
       compiler.importCode($("#sourceCode").val())
-      var result = compiler.compile();
+      try{
+        var result = compiler.compile();
+      }catch(e){
+        $("#compiledCode").val(e);
+        return;
+      }
+      
       console.log(typeof result)
       $("#compiledCode").val(JSON.stringify(result,null,2));
       showList(result)
