@@ -6,3 +6,6 @@ This is a compiler for Node.bf
 
 ## Get to run
 run code by enter **index.html** then enter the codes at first textbox, then press "compile"
+
+## License
+MIT License (Undecided).
