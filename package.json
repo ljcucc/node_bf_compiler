@@ -1,0 +1,25 @@
+{
+  "name": "node_bf_compiler",
+  "version": "1.0.0",
+  "description": "A node bf compiler for C",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ljcucc/node_bf_compiler.git"
+  },
+  "keywords": [
+    "node.bf",
+    "brainfuck",
+    "bf"
+  ],
+  "author": "ljcucc@github.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ljcucc/node_bf_compiler/issues"
+  },
+  "homepage": "https://github.com/ljcucc/node_bf_compiler#readme",
+  "dependencies": {}
+}

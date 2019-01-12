@@ -6,9 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="lexer.js"></script>
+
+    <!--system.js-->
+    <script src="//unpkg.com/zone.js@0.8.26?main=browser"></script>
+    <script src="//unpkg.com/systemjs@0.19.47/dist/system.js"></script>
+    <!-- <script src="lexer.js"></script>
     <script src="parser.js"></script>
-    <script src="nodebf_compiler.js"></script>
+    <script src="nodebf_compiler.js"></script> -->
   </head>
 
   <body>
@@ -24,7 +28,6 @@
       <textarea style="width:calc( 100%-8px); height:40vh;" id="compiledCode"></textarea>
     </p>
 
-
-    <script src="index.js"></script>
+    <script src="config.js"></script>
   </body>
 </html>

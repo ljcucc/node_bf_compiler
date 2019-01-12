@@ -1,3 +1,10 @@
+module.exports = Nodebf;
+
+const Lexer = require("./lexer.js");
+const Parser = require("./parser.js");
+
+console.log("Compiler has been loaded.")
+
 function Nodebf(){
   var compiledCode = "";
   var sourceCode = "";

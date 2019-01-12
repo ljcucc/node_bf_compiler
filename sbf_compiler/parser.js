@@ -1,3 +1,5 @@
+console.log("Parser has been loaded.");
+
 function Parser(){
   var sourceList = [];//sourceList that come from Lexer
   var parseList;// the Node objects that parsed from sourceList
