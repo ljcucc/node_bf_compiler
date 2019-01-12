@@ -1,0 +1,46 @@
+:root {
+  --mdc-theme-primary: #1976d2;
+  --mdc-theme-secondary: #fdd835;
+  --mdc-theme-background: #fff;
+}
+
+body{
+  margin:0;
+  padding:0;
+  background:#272822;
+}
+.mdc-toolbar-fixed-adjust{
+  padding-top:0;
+}
+.mdc-toolbar{
+  z-index:100;
+}
+
+.CodeMirror{
+  font-size:16px;
+  height:80vh;
+  z-index:0;
+}
+
+#floating-button{
+  position:fixed;
+  bottom:0;
+  margin:16px;
+  right:0;
+}
+
+#compiledCode{
+  padding:8px;
+}
+
+#showCodeDialog{
+  z-index:200;
+}
+
+.mdc-drawer .mdc-list-item--activated{
+  color:var(--mdc-theme-primary);
+}
+
+.mdc-drawer .mdc-list-item--activated .mdc-list-item__graphic{
+  color:var(--mdc-theme-primary);
+}

@@ -1,11 +1,13 @@
 (function(){
+
+
   const Nodebf = require("./sbf_compiler/nodebf_compiler.js");
   
   $("#compile").click(e=>{
     console.log("compiling")
     var compiler = new Nodebf();
-    console.log($("#sourceCode").val())
-    compiler.importCode($("#sourceCode").val())
+    console.log(editor.getValue()/*$("#sourceCode").val()*/)
+    compiler.importCode(editor.getValue()/*$("#sourceCode").val()*/)
     try{
       var result = compiler.compile();
     }catch(e){
@@ -16,6 +18,8 @@
     console.log(typeof result)
     $("#compiledCode").val(JSON.stringify(result,null,2));
     showList(result)
+
+    codeCompiledToast.open();
   })
 
   function showList(list){
