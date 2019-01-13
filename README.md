@@ -6,6 +6,11 @@ This is a compiler for Node.bf
 
 I'll build the node.js module soon.
 
+## What is Node.bf
+Node.bf is a environment that running base by brainfuck which is an less instruction set programming language. It easy to be implements on any programming language and developemnt environment.
+
+But node.bf is different bewteen trandictional brainfuck, node.bf using memory address of values to access native function and service. And Node.bf have 2 mode: sbf, bf, which allow evironment developer to build they own evironment with different way.
+
 ## Get to run
 1. Goto https://ljcucc.github.io/node_bf_compiler
 2. Get to coding
