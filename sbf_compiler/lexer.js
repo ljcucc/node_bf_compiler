@@ -1,3 +1,5 @@
+module.exports = Lexer;
+
 console.log("Lexer has been loaded.");
 
 function Lexer(){

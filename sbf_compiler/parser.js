@@ -1,3 +1,5 @@
+module.exports = Parser;
+
 console.log("Parser has been loaded.");
 
 function Parser(){
