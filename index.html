@@ -41,7 +41,7 @@
     <aside class="mdc-drawer mdc-drawer--modal">
       <div class="mdc-drawer__content">
         <nav class="mdc-list">
-          <a class="mdc-list-item mdc-list-item--activated" href="https://github.com/ljcucc" aria-selected="true">
+          <a class="mdc-list-item mdc-list-item--activated" id="about" aria-selected="true">
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true">info</i>
             <span class="mdc-list-item__text">About</span>
           </a>
@@ -62,7 +62,19 @@
           Code is compiled, click to checkout.
         </div>
         <div class="mdc-snackbar__actions">
-          <button type="button" class="mdc-button mdc-snackbar__action" onclick="showCodeDialog.open()" >show code</button>
+          <button type="button" class="mdc-button mdc-snackbar__action" onclick="showCodeDialog.open()" >show</button>
+        </div>
+      </div>
+    </div>
+    <div class="mdc-snackbar" id="compileErrorToast">
+      <div class="mdc-snackbar__surface">
+        <div class="mdc-snackbar__label"
+             role="status"
+             aria-live="polite">
+          Well... it seems like having <br>a error while compiling your codes.
+        </div>
+        <div class="mdc-snackbar__actions">
+          <button type="button" class="mdc-button mdc-snackbar__action" onclick="showCodeDialog.open()" >check</button>
         </div>
       </div>
     </div>
@@ -109,7 +121,7 @@
 
     <script src="config.js"></script>
     <script>
-      var editor, showCodeDialog, drawer, codeCompiledToast;
+      var editor, showCodeDialog, drawer, codeCompiledToast, compileErrorToast;
       $(document).ready(e=>{
         mdc.autoInit();
         var toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-toolbar'));
@@ -120,6 +132,8 @@
         drawer = mdc.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
 
         codeCompiledToast = new mdc.snackbar.MDCSnackbar(document.querySelector('.mdc-snackbar'));
+        compileErrorToast = new mdc.snackbar.MDCSnackbar(document.querySelector('#compileErrorToast'));
+        
 
          editor = CodeMirror.fromTextArea(document.querySelector("#sourceCode"), {
           lineNumbers: true,
@@ -127,6 +141,10 @@
           mode:"text/x-c",
           tabSize:2
         });
+
+        $("#about").click(e=>{
+          alert("Node.bf compiler\nbuild number: 011319_01")
+        })
       })
     </script>
   </body>

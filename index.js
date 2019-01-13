@@ -12,6 +12,7 @@
       var result = compiler.compile();
     }catch(e){
       $("#compiledCode").val(e);
+      compileErrorToast.open();
       return;
     }
 

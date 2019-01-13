@@ -22,6 +22,11 @@ body{
   z-index:0;
 }
 
+
+.mdc-snackbar{
+  z-index:170;
+}
+
 #floating-button{
   position:fixed;
   bottom:0;
