@@ -44,3 +44,15 @@ body{
 .mdc-drawer .mdc-list-item--activated .mdc-list-item__graphic{
   color:var(--mdc-theme-primary);
 }
+
+
+@media only screen and (min-width: 500px){
+  .mobile{
+    display:none;
+  }
+}
+@media only screen and (max-width: 500px){
+  .desktop{
+    display:none;
+  }
+}
