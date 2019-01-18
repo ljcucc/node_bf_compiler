@@ -19,6 +19,7 @@
 
     <!--Material Component-->
     <link rel="stylesheet" href="https://unpkg.com/material-components-web@0.43.0/dist/material-components-web.min.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
     <script src="https://unpkg.com/material-components-web@0.43.0/dist/material-components-web.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
@@ -26,7 +27,46 @@
   </head>
 
   <body>
-    <header class="mdc-toolbar mdc-toolbar--fixed">
+    <!-- <div class="mdc-drawer-scrim"></div> -->
+    <aside class="mdc-drawer mdc-drawer--dismissible">
+      <div class="mdc-drawer__header">
+        <h3 class="mdc-drawer__title">Brainfuck Plus</h3>
+        <h6 class="mdc-drawer__subtitle">A C IDE for Javascript node.bf compiler</h6>
+      </div>
+
+      <div class="mdc-drawer__content">
+        <nav class="mdc-list">
+          <a class="mdc-list-item" id="about">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">settings</i>
+            <span class="mdc-list-item__text">Settings</span>
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <div class="mdc-drawer-app-content">
+      <header class="mdc-top-app-bar app-bar mdc-top-app-bar--short mdc-top-app-bar--short-collapsed" id="app-bar">
+        <div class="mdc-top-app-bar__row">
+          <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+            <a onclick="drawer.open = !drawer.open;" class="material-icons mdc-top-app-bar__navigation-icon menu">menu</a>
+            <span class="mdc-top-app-bar__title">Editor</span>
+          </section>
+          <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+              <a id="compile"  class="material-icons mdc-top-app-bar__action-item" aria-label="Download" alt="Download">play_arrow</a>
+          </section>
+        </div>
+      </header>
+      <div class="mdc-top-app-bar--fixed-adjust">
+        <main class="main-content" id="main-content">
+          <textarea id="sourceCode"></textarea>
+        </main>
+      </div>
+    </div>
+
+
+    
+
+    <!-- <header class="mdc-toolbar mdc-toolbar--fixed">
       <div class="mdc-toolbar__row">
         <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
           <a onclick="drawer.open = !drawer.open;" class="material-icons mdc-toolbar__menu-icon mdc-icon-button">menu</a>
@@ -36,23 +76,7 @@
           <button id="compile" class="mdc-icon-button material-icons">play_arrow</button>
         </section>
       </div>
-    </header>
-
-    <aside class="mdc-drawer mdc-drawer--modal">
-      <div class="mdc-drawer__content">
-        <nav class="mdc-list">
-          <a class="mdc-list-item mdc-list-item--activated" id="about" aria-selected="true">
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">info</i>
-            <span class="mdc-list-item__text">About</span>
-          </a>
-          <a class="mdc-list-item" href="https://github.com/ljcucc/node_bf_compiler">
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">code</i>
-            <span class="mdc-list-item__text">Github</span>
-          </a>
-        </nav>
-      </div>
-    </aside>
-    <div class="mdc-drawer-scrim"></div>
+    </header> -->
 
     <div class="mdc-snackbar" id="codeCompiledToast">
       <div class="mdc-snackbar__surface">
@@ -88,10 +112,6 @@
       <span class="material-icons mdc-fab__icon">code</span>
     </button>
 
-    <main class="mdc-toolbar-fixed-adjust">
-      <textarea id="sourceCode"></textarea>
-    </main>
-
     <div class="mdc-dialog mdc-dialog--scrollable"
          id="showCodeDialog"
          role="alertdialog"
@@ -124,8 +144,8 @@
       var editor, showCodeDialog, drawer, codeCompiledToast, compileErrorToast;
       $(document).ready(e=>{
         mdc.autoInit();
-        var toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-toolbar'));
-        toolbar.fixedAdjustElement = document.querySelector('.mdc-toolbar-fixed-adjust');
+        // var toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-toolbar'));
+        // toolbar.fixedAdjustElement = document.querySelector('.mdc-toolbar-fixed-adjust');
 
         showCodeDialog = new mdc.dialog.MDCDialog(document.querySelector('#showCodeDialog'));
 
@@ -139,12 +159,29 @@
           lineNumbers: true,
           theme:"monokai",
           mode:"text/x-c",
-          tabSize:2
+          tabSize:2,
+          onChange:e=>{
+            console.log("onChange")
+            $(".mdc-top-app-bar--short").addClass("mdc-top-app-bar--short-collapsed");
+          }
         });
 
         $("#about").click(e=>{
           alert("Node.bf compiler\nbuild number: 011319_01")
         })
+
+        $(".menu").mouseenter(e=>{
+          console.log("mouse overed");
+          $(".mdc-top-app-bar--short").removeClass("mdc-top-app-bar--short-collapsed");
+        })
+
+        $(".menu").mouseleave(e=>{
+          console.log("mouse outed");
+          $(".mdc-top-app-bar--short").addClass("mdc-top-app-bar--short-collapsed");
+        })
+
+        const topAppBar = mdc.topAppBar.MDCTopAppBar.attachTo(document.getElementById('app-bar'));
+        topAppBar.setScrollTarget(document.getElementById('main-content'));
       })
     </script>
   </body>
