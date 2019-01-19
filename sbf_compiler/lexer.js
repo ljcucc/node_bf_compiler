@@ -114,7 +114,7 @@ function Lexer(){
 
   function analyzeCharAvoid(index,code,char,type,list,error){ //This function will avoid connected char that include the list
     if(code[index] ==  char){
-      if(list.indexOf(code[index]) > -1){
+      if(list.indexOf(code[index+1]) > -1){
         throw error;
       }
       return [1, {type, data:char}];

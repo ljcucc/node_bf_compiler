@@ -57,12 +57,12 @@ function Parser(){
     
     var item = sourceList[index];
     
-    console.log("parenParse is execute")
-    console.log(item);
+    // console.log("parenParse is execute")
+    // console.log(item);
     
     if(item.type == "paren"){
       if(item.data == "("){
-        console.log("( is execute")
+        // console.log("( is execute")
         parenStack.push({
           type:"paren",
           body:[]
@@ -109,50 +109,39 @@ function Parser(){
     if(item.type != "calc") return 0;
     
     if(item.data == "+" || item.data == "-"){
-      /*
-        ** 1+2+3 to (1+2)+3
+      var forwardNode = parenStack[parenStack.length -1];
+      if(forwardNode.data == "+" || forwardNode.data == "-"){
+        //pull-out and...
 
-        +: 1, 2 //origin
+        //push-back
+        //If there have a unpriority that push to stack before. we can use push-back to push
+        //The node back into father node which is the body of the last node.
 
-        ** if pointer point the calc + or -
-
-        +: +:(1, 2)  //push first
-
-        +: 
-          +:(1, 2),
-          3   //push to last
-      */
-
-      var lengthOfCalc = parenStack[parenStack.length -1].body.length;
-      if(lengthOfCalc == 1){ //meaning the +:x no +x,y.
-        var body = parenStack[parenStack.length -1].body.pop();
+        console.log("pull-out and push-back");
+        var temp = parenStack.pop();
         parenStack.push({
           type:"calc",
           data:item.data,
-          body:[body]
+          body:[]
         });
-      }else if(lengthOfCalc == 0){ //meaning the last node may also a calc node
-        throw new SyntaxError("The calculate char can't be connected. like 1++2+3 ");
-      }else{
-        var origin = parenStack.pop();
-        parenStack.push({
-          type:"calc",
-          data:item.data,
-          body:[origin]
-        });
+        pushLexerItem(temp);
       }
-
-      console.log("calcing");
-
       
+      //Overnode
+      //Overnode meaning one of new node that priority right is over than last node in stack,
+      //then new node can steal the last item of last node to the body of new node.
+      else if(forwardNode.data != "*" && forwardNode.data != "/"){ //Overnode is happend
+        console.log("Overnode is happend");
+        var lastItem = parenStack[parenStack.length -1].body.pop();
+        parenStack.push({  //Steal then push to the body of new ndoe
+          type:"calc",
+          data:item.data,
+          body:[]
+        });
+        pushLexerItem(lastItem);
+      }
     }else if(item.data == "*" || item.data == "/"){
-      var body = parenStack[parenStack.length-1].body.pop();
-      console.log("*/ part of parseCalc is execute")
-      parenStack.push({
-        type:"calc",
-        data:item.data,
-        body:[body]
-      })
+      
     }else return 0;
     
     return 1;

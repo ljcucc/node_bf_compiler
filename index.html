@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Node.bf compiler for C</title>
+    <title>PerpBox Editor</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,8 +30,8 @@
     <!-- <div class="mdc-drawer-scrim"></div> -->
     <aside class="mdc-drawer mdc-drawer--dismissible">
       <div class="mdc-drawer__header">
-        <h3 class="mdc-drawer__title">Brainfuck Plus</h3>
-        <h6 class="mdc-drawer__subtitle">A C IDE for Javascript node.bf compiler</h6>
+        <h3 class="mdc-drawer__title">PerpBox</h3>
+        <h6 class="mdc-drawer__subtitle">A PerpBox web IDE which made by @ljcucc on Github</h6>
       </div>
 
       <div class="mdc-drawer__content">
@@ -58,7 +58,7 @@
             </button>
             <span style="width:8px;"></span>
             <a id="compile"  class="appbarItem material-icons mdc-top-app-bar__action-item" aria-label="Download" alt="Download">play_arrow</a>
-            <a id="appbarToggler" class="material-icons mdc-top-app-bar__action-item" aria-label="Download" alt="Download">last_page</a>
+            <a id="appbarToggler" class="material-icons mdc-top-app-bar__action-item" title="Swipe toolbar">last_page</a>
           </section>
         </div>
       </header>
@@ -68,21 +68,6 @@
         </main>
       </div>
     </div>
-
-
-    
-
-    <!-- <header class="mdc-toolbar mdc-toolbar--fixed">
-      <div class="mdc-toolbar__row">
-        <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
-          <a onclick="drawer.open = !drawer.open;" class="material-icons mdc-toolbar__menu-icon mdc-icon-button">menu</a>
-          <span class="mdc-toolbar__title">Node.bf Compiler</span>
-        </section>
-        <section class="mdc-toolbar__section mdc-toolbar__section--align-end">
-          <button id="compile" class="mdc-icon-button material-icons">play_arrow</button>
-        </section>
-      </div>
-    </header> -->
 
     <div class="mdc-snackbar" id="codeCompiledToast">
       <div class="mdc-snackbar__surface">
@@ -144,10 +129,39 @@
       <div class="mdc-dialog__scrim"></div>
     </div>
 
+    <div class="mdc-dialog mdc-dialog--scrollable"
+         id="welcomeDialog"
+         role="alertdialog"
+         aria-modal="true"
+         aria-labelledby="my-dialog-title"
+         aria-describedby="my-dialog-content">
+      <div class="mdc-dialog__container">
+        <div class="mdc-dialog__surface">
+          <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+          <h2 class="mdc-dialog__title" id="my-dialog-title">First to look</h2>
+          <div class="mdc-dialog__content" id="my-dialog-content">
+            Welcoem to the Editor of PerpBox which made by @ljcucc on Github, PerpBox is a platform that make everything easy to execute and
+            easy to implements the evvironment that PerpBox run. PerpBox is base on Brainfuck which only working
+            on 8 char of keyword.<br>
+            <br>
+            Press Ctrl+R or Play button (after you open the toobar menu) to compile and preview the code. Press Ctrl+U
+            or upload button (inside toobar menu) to upload compiled code by using screen light.
+
+          </div>
+          <footer class="mdc-dialog__actions">
+            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+              <span class="mdc-button__label">Got it</span>
+            </button>
+          </footer>
+        </div>
+      </div>
+      <div class="mdc-dialog__scrim"></div>
+    </div>
+
 
     <script src="config.js"></script>
     <script>
-      var editor, showCodeDialog, drawer, codeCompiledToast, compileErrorToast, appbarToggle = false,
+      var editor, showCodeDialog, welcomeDialog, drawer, codeCompiledToast, compileErrorToast, appbarToggle = false,
        lastShortcutKey = "";
 
       const shortcuts = {
@@ -185,6 +199,10 @@
           "KeyB":{
             name:"Format code",
             icon:"format_shapes"
+          },
+          "KeyZ":{
+            name:"Undo",
+            icon:"undo"
           }
         }
       };
@@ -194,6 +212,8 @@
         // toolbar.fixedAdjustElement = document.querySelector('.mdc-toolbar-fixed-adjust');
 
         showCodeDialog = new mdc.dialog.MDCDialog(document.querySelector('#showCodeDialog'));
+
+        new mdc.dialog.MDCDialog(document.querySelector('#welcomeDialog')).open();
 
         drawer = mdc.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
 
@@ -205,11 +225,7 @@
           lineNumbers: true,
           theme:"monokai",
           mode:"text/x-c",
-          tabSize:2,
-          onChange:e=>{
-            console.log("onChange")
-            $(".mdc-top-app-bar--short").addClass("mdc-top-app-bar--short-collapsed");
-          }
+          tabSize:2
         });
 
         closeAppbar();
