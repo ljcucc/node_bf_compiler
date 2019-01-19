@@ -109,12 +109,42 @@ function Parser(){
     if(item.type != "calc") return 0;
     
     if(item.data == "+" || item.data == "-"){
-      var body = parenStack[parenStack.length-1].body.pop();
-      parenStack.push({
-        type:"calc",
-        data:item.data,
-        body:[body]
-      });
+      /*
+        ** 1+2+3 to (1+2)+3
+
+        +: 1, 2 //origin
+
+        ** if pointer point the calc + or -
+
+        +: +:(1, 2)  //push first
+
+        +: 
+          +:(1, 2),
+          3   //push to last
+      */
+
+      var lengthOfCalc = parenStack[parenStack.length -1].body.length;
+      if(lengthOfCalc == 1){ //meaning the +:x no +x,y.
+        var body = parenStack[parenStack.length -1].body.pop();
+        parenStack.push({
+          type:"calc",
+          data:item.data,
+          body:[body]
+        });
+      }else if(lengthOfCalc == 0){ //meaning the last node may also a calc node
+        throw new SyntaxError("The calculate char can't be connected. like 1++2+3 ");
+      }else{
+        var origin = parenStack.pop();
+        parenStack.push({
+          type:"calc",
+          data:item.data,
+          body:[origin]
+        });
+      }
+
+      console.log("calcing");
+
+      
     }else if(item.data == "*" || item.data == "/"){
       var body = parenStack[parenStack.length-1].body.pop();
       console.log("*/ part of parseCalc is execute")

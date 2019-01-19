@@ -49,10 +49,23 @@ function Lexer(){
       index += analyzePart(analyzeChar(index,sourceCode,";","lineEnd"));
       index += analyzePart(analyzeChar(index,sourceCode,".","point"));
       
-      index += analyzePart(analyzeChar(index,sourceCode,"+","calc"));
-      index += analyzePart(analyzeChar(index,sourceCode,"-","calc"));
-      index += analyzePart(analyzeChar(index,sourceCode,"*","calc"));
-      index += analyzePart(analyzeChar(index,sourceCode,"/","calc"));
+      index += analyzePart(analyzeCharAvoid(index,sourceCode,"+","calc","+-*/=.",
+        new SyntaxError("Exception with the char after calc char")
+      ));
+      index += analyzePart(analyzeCharAvoid(index,sourceCode,"-","calc","+-*/=.",
+        new SyntaxError("Exception with the char after calc char")
+      ));
+      index += analyzePart(analyzeCharAvoid(index,sourceCode,"*","calc","+-*/=.",
+        new SyntaxError("Exception with the char after calc char")
+      ));
+      index += analyzePart(analyzeCharAvoid(index,sourceCode,"/","calc","+-*/=.",
+        new SyntaxError("Exception with the char after calc char")
+      ));
+
+      // index += analyzePart(analyzeChar(index,sourceCode,"+","calc"));
+      // index += analyzePart(analyzeChar(index,sourceCode,"-","calc"));
+      // index += analyzePart(analyzeChar(index,sourceCode,"*","calc"));
+      // index += analyzePart(analyzeChar(index,sourceCode,"/","calc"));
       
       index += analyzePart(analyzeNumber(index,sourceCode));
       index += analyzePart(analyzeWord(index,sourceCode));
@@ -84,7 +97,7 @@ function Lexer(){
     return data[0];
   }
   
-  function analyzeParen(index,code,parenFirst,parenLast,type){
+  function analyzeParen(index,code,parenFirst,parenLast,type){ //Analyze a paren like chars
     console.log("parsing paren")
     if(code[index] == parenFirst || code[index] == parenLast){
       return [1, {type, data:code[index]}];
@@ -92,8 +105,18 @@ function Lexer(){
     return [0, null];
   }
   
-  function analyzeChar(index,code,char,type){
+  function analyzeChar(index,code,char,type){ //Analyze a char
     if(code[index] ==  char){
+      return [1, {type, data:char}];
+    }
+    return [0,null];
+  }
+
+  function analyzeCharAvoid(index,code,char,type,list,error){ //This function will avoid connected char that include the list
+    if(code[index] ==  char){
+      if(list.indexOf(code[index]) > -1){
+        throw error;
+      }
       return [1, {type, data:char}];
     }
     return [0,null];

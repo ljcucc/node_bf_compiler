@@ -52,7 +52,13 @@
             <span class="mdc-top-app-bar__title">Editor</span>
           </section>
           <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-              <a id="compile"  class="material-icons mdc-top-app-bar__action-item" aria-label="Download" alt="Download">play_arrow</a>
+            <button class="appbarItem mdc-button" id="shortcutHint">
+              <i class="material-icons mdc-button__icon" id="icon" style="color:white;" aria-hidden="true"></i>
+              <span class="mdc-button__label" id="name"></span>
+            </button>
+            <span style="width:8px;"></span>
+            <a id="compile"  class="appbarItem material-icons mdc-top-app-bar__action-item" aria-label="Download" alt="Download">play_arrow</a>
+            <a id="appbarToggler" class="material-icons mdc-top-app-bar__action-item" aria-label="Download" alt="Download">last_page</a>
           </section>
         </div>
       </header>
@@ -141,7 +147,47 @@
 
     <script src="config.js"></script>
     <script>
-      var editor, showCodeDialog, drawer, codeCompiledToast, compileErrorToast;
+      var editor, showCodeDialog, drawer, codeCompiledToast, compileErrorToast, appbarToggle = false,
+       lastShortcutKey = "";
+
+      const shortcuts = {
+        Ctrl:{
+          "KeyA":{
+            name:"select all",
+            icon:"select_all"
+          },
+          "KeyC":{
+            name:"copy",
+            icon:"filter_none"
+          },
+          "KeyV":{
+            name:"paste",
+            icon:"assignment"
+          },
+          "KeyS":{
+            name:"save",
+            icon:"save",
+            disableOriginShortcut:true
+          },
+          "KeyR":{
+            name:"Compile",
+            icon:"play_arrow",
+            disableOriginShortcut:true,
+            then:e=>{
+              document.querySelector("#compile").click();
+            }
+          },
+          "KeyF":{
+            name:"Find",
+            icon:"find_in_page",
+            disableOriginShortcut:true
+          },
+          "KeyB":{
+            name:"Format code",
+            icon:"format_shapes"
+          }
+        }
+      };
       $(document).ready(e=>{
         mdc.autoInit();
         // var toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-toolbar'));
@@ -166,19 +212,74 @@
           }
         });
 
+        closeAppbar();
+
         $("#about").click(e=>{
           alert("Node.bf compiler\nbuild number: 011319_01")
         })
 
-        $(".menu").mouseenter(e=>{
-          console.log("mouse overed");
-          $(".mdc-top-app-bar--short").removeClass("mdc-top-app-bar--short-collapsed");
+        $("#appbarToggler").click(e=>{
+          appbarToggle = ! appbarToggle;
+          if(appbarToggle){
+            openAppbar();
+          }else{
+            closeAppbar();
+          }
         })
 
-        $(".menu").mouseleave(e=>{
-          console.log("mouse outed");
-          $(".mdc-top-app-bar--short").addClass("mdc-top-app-bar--short-collapsed");
+        window.addEventListener("keydown",e=>{
+          if(e.key == "Control")
+          {
+            openAppbar();
+          }
+
+          if(e.ctrlKey){
+            if(typeof shortcuts.Ctrl[e.code] != "undefined"){              
+              showShortcut(shortcuts.Ctrl[e.code].name,shortcuts.Ctrl[e.code].icon);
+              if(shortcuts.Ctrl[e.code].disableOriginShortcut) e.preventDefault();
+              lastShortcutKey = e.code;
+            }
+          }
+
+        });
+        
+        window.addEventListener("keyup",e=>{
+          if(e.key == "Control"){
+            closeAppbar();
+          }
+
+          if(e.code == lastShortcutKey){
+            $("#shortcutHint").fadeOut(100);
+
+            if(shortcuts.Ctrl[lastShortcutKey].then){
+              shortcuts.Ctrl[lastShortcutKey].then();
+            }
+            lastShortcutKey = "";
+          }
         })
+
+        function openAppbar(){
+          $(".mdc-top-app-bar--short").removeClass("mdc-top-app-bar--short-collapsed");
+            $(".appbarItem").show();
+            $("#shortcutHint").hide();
+            $("#appbarToggler").html("chevron_left");
+        }
+
+        function closeAppbar(){
+          if(!appbarToggle){
+            $(".mdc-top-app-bar--short").addClass("mdc-top-app-bar--short-collapsed");
+            $(".appbarItem").hide();
+            $("#appbarToggler").html("last_page");
+          }
+        }
+
+        function showShortcut(name,icon){
+          $("#shortcutHint>#name").text(name);
+          $("#shortcutHint>#icon").html(icon);
+          $("#shortcutHint").fadeIn(100);
+        }
+
+        //Disabel Ctrl+S
 
         const topAppBar = mdc.topAppBar.MDCTopAppBar.attachTo(document.getElementById('app-bar'));
         topAppBar.setScrollTarget(document.getElementById('main-content'));
