@@ -141,7 +141,25 @@ function Parser(){
         pushLexerItem(lastItem);
       }
     }else if(item.data == "*" || item.data == "/"){
-      
+      var forwardNode = parenStack[parenStack.length -1];
+      if(forwardNode.data == "*" || forwardNode.data == "/"){ //If it is a equals-node
+        console.log("*/ equals-node");
+        var temp = parenStack.pop();
+        parenStack.push({
+          type:"calc",
+          data:item.data,
+          body:[temp]
+        });
+      }else{ //If not a equals-node, it must be a over-node
+        console.log("*/ overnode");
+        var lastItem = parenStack[parenStack.length -1].body.pop();
+        parenStack.push({
+          type:"calc",
+          data:item.data,
+          body:[]
+        });
+        pushLexerItem(lastItem);
+      }
     }else return 0;
     
     return 1;
