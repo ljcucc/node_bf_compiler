@@ -1,7 +1,7 @@
 System.config({
   packages: {
     ".":{
-      main: './index.js',
+      main: './app.js',
       defaultExtension: 'js'
     }
   }
@@ -10,5 +10,5 @@ System.config({
 // System.import('./main')
 //   .catch(console.error.bind(console));
 
-System.import('./index.js')
+System.import('./app.js')
   .catch(console.error.bind(console));
