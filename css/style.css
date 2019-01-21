@@ -68,7 +68,6 @@ body{
 .mdc-drawer__header{
   padding-top:16px;
   padding-bottom:24px;
-  border-bottom: 1px solid rgba(0,0,0,.25);
 }
 
 .mdc-drawer .mdc-list-item--activated{
@@ -89,4 +88,8 @@ body{
   .desktop{
     display:none;
   }
+}
+
+.split-line{
+  border-bottom: 1px solid rgba(0,0,0,.25);
 }
