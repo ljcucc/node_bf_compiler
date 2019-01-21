@@ -22,7 +22,19 @@ function Parser(){
     var count = 0;
     while(index < sourceList.length){
       console.log(index);
-      index += parenParse(index);
+      index += parenParse(index,{
+        type:"paren",
+        head:"(",
+        tail:")",
+        finalType:"paren"
+      });
+
+      index += parenParse(index,{
+        type:"areaParen",
+        head:"{",
+        tail:"}",
+        finalType:"area"
+      });
       index += parseCalc(index);
       index += parseElse(index);
       index += parseLineEnd(index);
@@ -52,7 +64,7 @@ function Parser(){
     return parseList;
   }
   
-  function parenParse(index){
+  function parenParse(index,config){
     if(nullPointBreaker(index)) return 0;
     
     var item = sourceList[index];
@@ -60,41 +72,18 @@ function Parser(){
     // console.log("parenParse is execute")
     // console.log(item);
     
-    if(item.type == "paren"){
-      if(item.data == "("){
+    if(item.type == config.type){
+      if(item.data == config.head){
         // console.log("( is execute")
         parenStack.push({
-          type:"paren",
+          type:config.finalType,
           body:[]
         }); //push a paren level into parenStack
-      }else if(item.data == ")"){
+      }else if(item.data == config.tail){
         var popItem = parenStack.pop(); //move last node into upper node.
-        if(isValue(popItem)){
-          // console.log("is value");
-          var lastItem = parenStack.pop();
-        }else{
-          // console.log("not a value");
-          console.log(popItem);
-        }
-        /*
-          such like this:
-          
-          0:[3,"+""] <- then move to here
-          1:[1,"+",2] <- first pop this
-          
-          then you'll get:
-          
-          [
-            3,
-            "+",
-            [
-              1,
-              "+",
-              2
-            ]
-          ]
-        */
         pushLexerItem(popItem);
+
+        if(config.callback_tail)config.callback_tail();
       }
       return 1;
     }
@@ -175,6 +164,7 @@ function Parser(){
     
     switch(item.type){
       case "paren":
+      case "areaParen":
       case "calc":
       case "lineEnd":
         return 0;
@@ -193,6 +183,7 @@ function Parser(){
   
   function parseLineEnd(index){
     var item = sourceList[index];
+    if(typeof item == "undefined") return 0;
     try{
       if(item.type != "lineEnd") return 0;
     }catch(e){
@@ -217,6 +208,7 @@ function Parser(){
   }
   
   function pushLexerItem(item){ //push a unparsed node into item of parenStack
+    // if(item == null) return;
     parenStack[parenStack.length-1].body.push(item);
   }
   
