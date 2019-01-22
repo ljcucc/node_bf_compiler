@@ -30,4 +30,4 @@ MIT License (Undecided).
 
 Additional:
 
-The product that made by this editor should
+The product that made by this compiler should be indicated the credit of this project.
