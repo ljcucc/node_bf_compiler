@@ -24,6 +24,7 @@ But Perpbox is different bewteen trandictional brainfuck, Perpbox using memory a
 * Material Design Icon
 * Material Component@ 0.43.0
 * Code Mirror@ 5.42.2
+* jQuery@ 3.3.1
 
 ## License
 MIT License (Undecided).
