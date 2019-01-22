@@ -1,7 +1,7 @@
 (function(){
 
-
-  const Nodebf = require("./src/nodebf_compiler.js");
+  const Nodebf = require("./compiler/nodebf_compiler.js");
+  const $ = require("jquery");
   
   $("#compile").click(e=>{
     console.log("compiling")

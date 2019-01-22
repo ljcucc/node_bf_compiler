@@ -1,9 +1,8 @@
-var editor,
-  showCodeDialog,
+const $ = require("jquery");
+const cookie = require("./localStorage/cookie");
+
+var
   welcomeDialog,
-  drawer,
-  codeCompiledToast,
-  compileErrorToast,
   appbarToggle = false,
   lastShortcutKey = "";
 
@@ -57,9 +56,11 @@ $(document).ready(e => {
   showCodeDialog = new mdc.dialog.MDCDialog(
     document.querySelector("#showCodeDialog")
   );
-
-  new mdc.dialog.MDCDialog(document.querySelector("#welcomeDialog")).open();
-
+  
+  if(cookie.getCookie("first_time") != 192201){
+    cookie.setCookie("first_time",192201);
+    new mdc.dialog.MDCDialog(document.querySelector("#welcomeDialog")).open();
+  }
   drawer = mdc.drawer.MDCDrawer.attachTo(document.querySelector(".mdc-drawer"));
 
   codeCompiledToast = new mdc.snackbar.MDCSnackbar(
@@ -149,4 +150,5 @@ $(document).ready(e => {
     document.getElementById("app-bar")
   );
   topAppBar.setScrollTarget(document.getElementById("main-content"));
+  
 });
