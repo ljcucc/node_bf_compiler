@@ -5,17 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
     <!--system.js-->
     <script src="//unpkg.com/zone.js@0.8.26?main=browser"></script>
-    <script src="//unpkg.com/systemjs@0.19.47/dist/system.js"></script>
+    <script src="//unpkg.com/systemjs@0.21.6/dist/system.js"></script>
 
     <!-- Code Mirror -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/mode/clike/clike.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/codemirror.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.2/theme/monokai.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/mode/clike/clike.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/codemirror.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/theme/monokai.min.css"/>
 
     <!--Material Component-->
     <link rel="stylesheet" href="https://unpkg.com/material-components-web@0.43.0/dist/material-components-web.min.css"/>
@@ -25,8 +23,17 @@
     
     <!--Application-->
     <script src="config.js"></script>
-    <script src="index.js"></script>
     <link rel="stylesheet" href="css/style.css"/>
+
+    <script>
+      //Global variables
+      var 
+        editor,
+        codeCompiledToast,
+        compileErrorToast,
+        showCodeDialog,
+        drawer;
+    </script>
   </head>
  
   <body>
