@@ -111,7 +111,7 @@ $(document).ready(e => {
       closeAppbar();
     }
 
-    if (e.code == lastShortcutKey) {
+    if (e.code == lastShortcutKey && typeof shortcuts.Ctrl[lastShortcutKey] !== "undefined") {
       $("#shortcutHint").fadeOut(100);
 
       if (shortcuts.Ctrl[lastShortcutKey].then) {
