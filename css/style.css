@@ -23,7 +23,7 @@ body{
   z-index:170;
 }
 
-#floating-button{
+#showcode-button{
   position:fixed;
   bottom:0;
   margin:16px;
