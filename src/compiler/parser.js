@@ -2,6 +2,10 @@ module.exports = Parser;
 
 console.log("Parser has been loaded.");
 
+const keywordTypes = [
+  "if","else","while","for","true","false","define","void","int","float"
+];
+
 function Parser(){
   var sourceList = [];//sourceList that come from Lexer
   var parseList;// the Node objects that parsed from sourceList
@@ -33,7 +37,11 @@ function Parser(){
         type:"areaParen",
         head:"{",
         tail:"}",
-        finalType:"area"
+        finalType:"area",
+        callback_tail:()=>{
+          var popItem = parenStack.pop(); //move last node into upper node.
+          pushLexerItem(popItem);
+        }
       });
       index += parseCalc(index);
       index += parseElse(index);
@@ -80,8 +88,8 @@ function Parser(){
           body:[]
         }); //push a paren level into parenStack
       }else if(item.data == config.tail){
-        var popItem = parenStack.pop(); //move last node into upper node.
-        pushLexerItem(popItem);
+        // var popItem = parenStack.pop(); //move last node into upper node.
+        // pushLexerItem(popItem);
 
         if(config.callback_tail)config.callback_tail();
       }
@@ -190,14 +198,16 @@ function Parser(){
       throw new SyntaxError("exception with ';'.");
     }
     console.log("parseLineEnd is execute");
-    pushAllToStack();
+    // pushAllToStack();
+    pushLexerItem(parenStack.pop());
     return 1;
   }
   
   function pushAllToStack(){
     console.log("pushAllToStack is execute");
     while(parenStack[parenStack.length -1].type != "root"
-    &&parenStack[parenStack.length -1].type != "areaParen"){
+    && parenStack[parenStack.length -1].type != "area"){
+      console.log(parenStack[parenStack.length -1].type)
       pushLexerItem(parenStack.pop());
     }
   }
@@ -222,5 +232,9 @@ function Parser(){
       type,
       body:[]
     };
+  }
+
+  function methodCallParse(index){
+    
   }
 }
