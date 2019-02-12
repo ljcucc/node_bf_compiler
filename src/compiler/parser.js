@@ -26,12 +26,17 @@ function Parser(){
     var count = 0;
     while(index < sourceList.length){
       console.log(index);
+      console.log(parenStack);
+      
+      
       index += parenParse(index,{
         type:"paren",
         head:"(",
         tail:")",
         finalType:"paren"
       });
+      
+      console.log("parenParse is runned");
 
       index += parenParse(index,{
         type:"areaParen",
@@ -46,6 +51,7 @@ function Parser(){
       index += parseCalc(index);
       index += parseElse(index);
       index += parseLineEnd(index);
+      // index += methodCallParse(index);
       
       if(index != lastIndex){
         lastIndex = index;
@@ -60,10 +66,11 @@ function Parser(){
     }
     
     if(parenStack.length != 1){
+      console.log(sourceList[index]);
       console.log(parenStack)
       throw "Some of paren may no complete with another end-paren";
     }
-    
+     
     parseList = parenStack[0]; //Because the stack will only left one item in it, so I just pick up the
     //first item that inside the stack into parenList which is a root node obeject.
   }
@@ -81,20 +88,33 @@ function Parser(){
     // console.log(item);
     
     if(item.type == config.type){
-      if(item.data == config.head){
-        // console.log("( is execute")
+      if(item.data == config.tail){
+        console.log("Paren is end");
+        
+        pushAllToStack_untill(config.head);
+        
+        var popItem = parenStack.pop(); //move last node into upper node.
+        popItem.type = config.finalType;
+        pushLexerItem(popItem);
+        
+        if(config.callback_tail)config.callback_tail();
+        return 1;
+      }else if(item.data == config.head){
+        console.log("Paren is start");
         parenStack.push({
-          type:config.finalType,
+          type:config.head,
           body:[]
         }); //push a paren level into parenStack
-      }else if(item.data == config.tail){
-        // var popItem = parenStack.pop(); //move last node into upper node.
-        // pushLexerItem(popItem);
-
-        if(config.callback_tail)config.callback_tail();
+        
+        return 1;
       }
-      return 1;
+    }else{
+      console.log(item.type + " is different to "+config.type);
+      
     }
+    
+    console.log(item)
+    console.log(config);
     return 0;
   }
   
@@ -176,14 +196,9 @@ function Parser(){
       case "calc":
       case "lineEnd":
         return 0;
-      case "number":
-        // if(parenStack[parenStack.length - 1].type == "calc"){
-        //   pushLexerItem(item);
-        //   pushLexerItem(parenStack.pop());
-        //   return 1;
-        // }
       default:
-        pushLexerItem(item);
+        // pushLexerItem(item);
+        parenStack.push(item);
     }
     
     return 1;
@@ -191,7 +206,7 @@ function Parser(){
   
   function parseLineEnd(index){
     var item = sourceList[index];
-    if(typeof item == "undefined") return 0;
+    if(item.type != "lineEnd") return 0;
     try{
       if(item.type != "lineEnd") return 0;
     }catch(e){
@@ -199,7 +214,7 @@ function Parser(){
     }
     console.log("parseLineEnd is execute");
     // pushAllToStack();
-    pushLexerItem(parenStack.pop());
+    pushAllToStack();
     return 1;
   }
   
@@ -208,7 +223,29 @@ function Parser(){
     while(parenStack[parenStack.length -1].type != "root"
     && parenStack[parenStack.length -1].type != "area"){
       console.log(parenStack[parenStack.length -1].type)
-      pushLexerItem(parenStack.pop());
+      // pushLexerItem(parenStack.pop());
+      
+      var item = parenStack.pop();
+      if(typeof parenStack[parenStack.length - 1].body != "object"){
+        parenStack[parenStack.length - 1].body = [item]
+      }else{
+        parenStack[parenStack.length - 1].body.push(item);
+      }
+    }
+  }
+  
+  function pushAllToStack_untill(type){
+    while(parenStack[parenStack.length -1].type != "root"
+      && parenStack[parenStack.length -1].type != type){
+      console.log(parenStack[parenStack.length -1].type)
+      // pushLexerItem(parenStack.pop());
+      
+      var item = parenStack.pop();
+      if(typeof parenStack[parenStack.length - 1].body != "object"){
+        parenStack[parenStack.length - 1].body = [item]
+      }else{
+        parenStack[parenStack.length - 1].body.push(item);
+      }
     }
   }
   
@@ -219,6 +256,10 @@ function Parser(){
   
   function pushLexerItem(item){ //push a unparsed node into item of parenStack
     // if(item == null) return;
+    if(parenStack[parenStack.length-1].body == null){
+      parenStack[parenStack.length-1].body = [];
+    }
+    
     parenStack[parenStack.length-1].body.push(item);
   }
   
