@@ -29,5 +29,4 @@ But Perpbox is different bewteen trandictional brainfuck, Perpbox using memory a
 MIT License (Undecided).
 
 Additional:
-
 The product that made by this editor should
